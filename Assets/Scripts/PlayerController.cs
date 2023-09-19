@@ -12,6 +12,9 @@ public class PlayerController : MonoBehaviour
     public TMP_Text timerTxt;
     public GameObject timeUpTxt;
     public GameObject instructionTextObject;
+    public Collider spawnArea;
+    public TMP_Text currentScoreTxt;
+    public TMP_Text highScoreTxt;
 
     private Rigidbody rb;
     private AudioSource coinAudio;
@@ -19,6 +22,8 @@ public class PlayerController : MonoBehaviour
     private bool isGameRunning = false;
     private float timer = 60f;
     private bool isTimeUp = false;
+
+    private int highScore;
 
     private float movementX;
     private float movementY;
@@ -34,6 +39,27 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         coinAudio = GetComponent<AudioSource>();
+    }
+
+    private void SetHighScore()
+    {
+        if (PlayerPrefs.HasKey("HIGHSCORE") == false)
+        {
+            highScore = coinCount;
+            PlayerPrefs.SetInt("HIGHSCORE", highScore);
+        }
+        else
+        {
+            highScore = PlayerPrefs.GetInt("HIGHSCORE");
+            if (coinCount > highScore)
+            {
+                highScore = coinCount;
+                PlayerPrefs.SetInt("HIGHSCORE", highScore);
+            }
+        }
+
+        currentScoreTxt.text = "Score: " + coinCount.ToString();
+        highScoreTxt.text = "High Score: " + highScore.ToString();
     }
 
     private void StartGame()
@@ -92,8 +118,9 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Coin"))
         {
             coinAudio.Play();
-            other.gameObject.SetActive(false);
-
+            //other.gameObject.SetActive(false);
+            
+            SetObjectToRandomPosition(other.gameObject.transform.parent);
             UpdateScore(1);
 
             SetCountText();
@@ -124,6 +151,7 @@ public class PlayerController : MonoBehaviour
             timer = 0.0f;
             timerTxt.text = "TIMER: " + timer.ToString("00");
 
+            SetHighScore();
             timeUpTxt.SetActive(true);
             Time.timeScale = 0;
             isTimeUp = true;
@@ -138,5 +166,15 @@ public class PlayerController : MonoBehaviour
             SceneManager.LoadScene("GameScene");
         }
         
+    }
+
+    private void SetObjectToRandomPosition(Transform objectTransform)
+    {
+        float randomPositionX = Random.Range(spawnArea.bounds.min.x, spawnArea.bounds.max.x);
+        float randomPositionZ = Random.Range(spawnArea.bounds.min.z, spawnArea.bounds.max.z);
+
+        objectTransform.position = new Vector3(randomPositionX, gameObject.transform.position.y, randomPositionZ);
+
+        objectTransform.gameObject.SetActive(true);
     }
 }
