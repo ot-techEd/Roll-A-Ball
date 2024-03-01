@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/RollABall/Scenes/GameScene.unity
+    path: Assets/RollABall/Scenes/GameScene_Complete.unity
     guid: 6dac054f950ce4867be0f256b0639af3
+  - enabled: 1
+    path: Assets/RollABall/Scenes/GameScene_Incomplete.unity
+    guid: 41141981fcbc34f4fae5c54fcb0dd2e4
   m_configObjects: {}

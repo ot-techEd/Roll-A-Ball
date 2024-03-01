@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     public Collider spawnArea;
     public TMP_Text currentScoreTxt;
     public TMP_Text highScoreTxt;
+    public string sceneName = "GameScene_Complete";
 
     private Rigidbody rb;
     private AudioSource coinAudio;
@@ -163,7 +164,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.R) && isTimeUp == true)
         {
-            SceneManager.LoadScene("GameScene");
+            SceneManager.LoadScene(sceneName);
         }
         
     }
